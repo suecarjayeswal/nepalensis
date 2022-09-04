@@ -26,10 +26,13 @@ def popup_html(row):
     name = str(genus_name)+ " " + str(species_name)
     left_col_color = "#19a7bd"
     right_col_color = "#f2f0d3"
-    html1 = """ <html><head><h4 style="margin-bottom:10"; width="200px">{}</h4>""".format("Info")+"""</head><table style="height: 126px; width: 350px;"><tbody>"""
-    html2= """<tr><td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">{}</span>""".format("name")+"""</td><td style="width: 150px;background-color: """+ right_col_color +""";">{}</td>""".format(name) 
+    html1 = """ <html><head><h4 style="margin-bottom:10"; width="200px"display: 'flex';align-items: 'center';justify-content: 'space-between';>{}""".format("Info")
+    html2=""
+    print(imgurl)
     if str(imgurl) != 'nan':
         html2 = html2+ """<img src={} height = '100' width='100'>""".format(imgurl)
+    html2= """</h4></head><table style="height: 126px; width: 350px;"><tbody><tr><td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">{}</span>""".format("name")+"""</td><td style="width: 150px;background-color: """+ right_col_color +""";">{}</td>""".format(name) 
+    
     html2 = html2+ """</tr>"""
     for that in queries:
         html2 = html2+"""<tr><td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">{}</span>""".format(that)+"""</td><td style="width: 150px;background-color: """+ right_col_color +""";">{}</td>""".format(df[that].iloc[i]) + """</tr>"""
@@ -75,6 +78,7 @@ def index(request):
         form = SearchForm(request.POST)
         if form.is_valid():
             form.save()
+            print("here form")
             return redirect('/')
     else:
         form = SearchForm()
@@ -89,7 +93,7 @@ def index(request):
     #creating map object
     m = folium.Map(location=[27.79,85.2714],zoom_start=6,)
     folium.TileLayer(tiles = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',attr = 'Esri',name = 'Esri Satellite',overlay = True,opacity=0.6,control = True).add_to(m)
-    #folium.Marker([lat,lng],tooltip='Click for More',popup=country).add_to(m)
+    folium.Marker([lat,lng],tooltip='Click for More',popup=country).add_to(m)
     locs = getlocs(filepath)
     HeatMap(locs,min_opacity=0.1,control=True, blur = 35).add_to(m)
     popupslis=[]
