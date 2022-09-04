@@ -3,14 +3,8 @@ import os
 import numpy as np
 from folium.plugins import HeatMap
 import folium
+import geocoder
 
-
-def getHeaders(filename):
-    file = open(filename,"r")
-    for line in file:
-        headers = line.split('\t')
-        break
-    return headers
 def getlocs(filename): 
     df = pd.read_csv(filename, delimiter='\t')
     df2 = []
@@ -32,10 +26,19 @@ def getlocs(filename):
     return locs
 
 filepath = os.path.join(os.getcwd(),"BOLDmapNepal","data files","bold_data.tsv")
-headers = getHeaders(filepath)
 locs = getlocs(filepath)
 ldf =  pd.read_csv(filepath, delimiter='\t')
-m = folium.Map(location=[27.79,85.2714],zoom_start=6)
-for a in locs:
-    print(a)
-HeatMap(locs).add_to(m)
+headers = ldf.columns.values
+df2 = ldf.sort_values(['lat','lon'])
+print(df2.loc[:,['processid','lat','lon']])
+df2 = df2.dropna(subset=['lat','lon'])
+print(df2.loc[:,['processid','lat','lon']])
+latlonlis = []
+for i,row in df2.iterrows():
+    latlonlis.append([row['lat'],row['lon']])
+lat = 30.1200
+lon = 81.4000
+print(df2.loc[df2['lat']==lat ,['processid','lat','lon']])
+filepath = os.path.join(os.getcwd(),"BOLDmapNepal","data files","bold_data2.csv")
+df2.to_csv(filepath)
+#print(headers)

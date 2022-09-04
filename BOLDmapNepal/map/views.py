@@ -7,70 +7,37 @@ from .forms import SearchForm
 import pandas as pd
 import os
 import numpy as np
+import branca
 from pathlib import Path
 from folium.plugins import MarkerCluster,HeatMap
+from pathlib import Path
 
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+filepath = os.path.join(BASE_DIR,"data files","bold_data2.csv")
+df = pd.read_csv(filepath)
 def popup_html(row):
     i = row
-    institution_name=df['INSTNM'].iloc[i] 
-    institution_url=df['URL'].iloc[i]
-    institution_type = df['CONTROL'].iloc[i] 
-    highest_degree=df['HIGHDEG'].iloc[i] 
-    city_state = df['CITY'].iloc[i] +", "+ df['STABBR'].iloc[i]                     
-    admission_rate = df['ADM_RATE'].iloc[i]
-    cost = df['COSTT4_A'].iloc[i]
-    instate_tuit = df['TUITIONFEE_IN'].iloc[i]
-    outstate_tuit = df['TUITIONFEE_OUT'].iloc[i]
-
+    queries = ['processid','sampleid','phylum_name','class_name','order_name','family_name','genus_name','species_name','subspecies_name']
+    genus_name = df['genus_name'].iloc[i]
+    species_name = df['species_name'].iloc[i]
+    imgurl = df['image_urls'].iloc[i]
+    name = str(genus_name)+ " " + str(species_name)
     left_col_color = "#19a7bd"
     right_col_color = "#f2f0d3"
-    
-    html = """<!DOCTYPE html>
-<html>
-
-<head>
-<h4 style="margin-bottom:10"; width="200px">{}</h4>""".format(institution_name) + """
-
-</head>
-    <table style="height: 126px; width: 350px;">
-<tbody>
-<tr>
-<td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">Institution Type</span></td>
-<td style="width: 150px;background-color: """+ right_col_color +""";">{}</td>""".format(institution_type) + """
-</tr>
-<tr>
-<td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">Institution URL</span></td>
-<td style="width: 150px;background-color: """+ right_col_color +""";">{}</td>""".format(institution_url) + """
-</tr>
-<tr>
-<td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">City and State</span></td>
-<td style="width: 150px;background-color: """+ right_col_color +""";">{}</td>""".format(city_state) + """
-</tr>
-<tr>
-<td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">Highest Degree Awarded</span></td>
-<td style="width: 150px;background-color: """+ right_col_color +""";">{}</td>""".format(highest_degree) + """
-</tr>
-<tr>
-<td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">Admission Rate</span></td>
-<td style="width: 150px;background-color: """+ right_col_color +""";">{}</td>""".format(admission_rate) + """
-</tr>
-<tr>
-<td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">Annual Cost of Attendance $</span></td>
-<td style="width: 150px;background-color: """+ right_col_color +""";">{}</td>""".format(cost) + """
-</tr>
-<tr>
-<td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">In-state Tuition $</span></td>
-<td style="width: 150px;background-color: """+ right_col_color +""";">{}</td>""".format(instate_tuit) + """
-</tr>
-<tr>
-<td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">Out-of-state Tuition $</span></td>
-<td style="width: 150px;background-color: """+ right_col_color +""";">{}</td>""".format(outstate_tuit) + """
-</tr>
-</tbody>
-</table>
-</html>
-"""
-
+    html1 = """ <html><head><h4 style="margin-bottom:10"; width="200px">{}</h4>""".format("Info")+"""</head><table style="height: 126px; width: 350px;"><tbody>"""
+    html2= """<tr><td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">{}</span>""".format("name")+"""</td><td style="width: 150px;background-color: """+ right_col_color +""";">{}</td>""".format(name) 
+    if str(imgurl) != 'nan':
+        html2 = html2+ """<img src={} height = '100' width='100'>""".format(imgurl)
+    html2 = html2+ """</tr>"""
+    for that in queries:
+        html2 = html2+"""<tr><td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">{}</span>""".format(that)+"""</td><td style="width: 150px;background-color: """+ right_col_color +""";">{}</td>""".format(df[that].iloc[i]) + """</tr>"""
+    hyperlink = "https://www.boldsystems.org/index.php/Public_RecordView?processid={}".format(df['processid'].iloc[i])
+    html2= html2+ """<tr><td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">{}</span>""".format("More Info")+"""</td><td style="width: 150px;background-color: """+ right_col_color +""";"><a href={}>here</a></td>""".format(hyperlink) + """</tr>"""
+    html3 = """</tbody></table></html>"""
+    html = html1 + html2 + html3
+    return html
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -81,7 +48,7 @@ def getHeaders(filename):
         break
     return headers
 def getlocs(filename): 
-    df = pd.read_csv(filename, delimiter='\t')
+    df = pd.read_csv(filename)
     df2 = []
     for a in np.concatenate((df[['lat']].values,df[['lon']].values),axis=1):
         b = str(a)[1:-1]
@@ -100,8 +67,7 @@ def getlocs(filename):
         if d != []: locs.append(d)
     return locs
 
-filepath = os.path.join(BASE_DIR,"data files","bold_data.tsv")
-ldf = pd.read_csv(filepath, delimiter='\t')
+
 # Create your views here.
 def index(request):
     #address = request.POST.get('address')
@@ -121,29 +87,22 @@ def index(request):
         address.delete()
         return HttpResponse('Your Input is invalid')
     #creating map object
-    
     m = folium.Map(location=[27.79,85.2714],zoom_start=6,)
-    tile = folium.TileLayer(
-        tiles = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-        attr = 'Esri',
-        name = 'Esri Satellite',
-        overlay = True,
-        opacity=0.6,
-        control = True
-       ).add_to(m)
-    folium.Marker([lat,lng],tooltip='Click for More',popup=country).add_to(m)
+    folium.TileLayer(tiles = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',attr = 'Esri',name = 'Esri Satellite',overlay = True,opacity=0.6,control = True).add_to(m)
+    #folium.Marker([lat,lng],tooltip='Click for More',popup=country).add_to(m)
     locs = getlocs(filepath)
-    MarkerCluster(locs).add_to(m)
     HeatMap(locs,min_opacity=0.1,control=True, blur = 35).add_to(m)
-    # for a in locs:
-    #     try:
-
-    #         lat,lng = a
-    #         m.simple_marker(location = [lat,lng],clustered_marker = True)
-    #         #folium.Marker([lat,lng],tooltip='Click for More',popup=country).add_to(m)
-    #     except:
-    #         continue
-    # get html repr of map object
+    popupslis=[]
+    for i in range(0,len(df)):
+        html = popup_html(i)
+        iframe = branca.element.IFrame(html=html,width=510,height=280)
+        popup = folium.Popup(folium.Html(html, script=True), max_width=500)
+        popupslis.append(popup)
+        # try:
+        #     #folium.Marker([df['lat'].iloc[i],df['lon'].iloc[i]],popup=popup,icon=folium.Icon(prefix='fa')).add_to(m)  
+        # except:
+        #     continue 
+    MarkerCluster(locs,popups=popupslis).add_to(m)
     m = m._repr_html_()
     context = {
         'm':m,
