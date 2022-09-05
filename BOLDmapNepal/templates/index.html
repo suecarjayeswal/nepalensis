@@ -10,10 +10,19 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-
+    <script src="/templates/Chart.js"></script>
+    <style>
+      canvas{
+        display:none;
+      }
+      div{
+        max-width:90%!important;
+      }
+    </style>
     <title>nepalensis</title>
   </head>
   <body>
+    
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <a class="navbar-brand" href="#">nepalensis</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -25,23 +34,19 @@
           <li class="nav-item active">
             <a class="nav-link" href="{% url 'index' %}">Map <span class="sr-only">(current)</span></a>
           </li>
+          
           <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
-          </li>
-          <!-- <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
-              Dropdown
-            </a>
-            <div class="dropdown-menu">
-              <a class="dropdown-item" href="#">Action</a>
-              <a class="dropdown-item" href="#">Another action</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">Something else here</a>
-            </div>
+            <a class="nav-link" href="https://www.boldsystems.org/index.php">BOLDsystems</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link disabled">Disabled</a>
-          </li> -->
+            <a class="nav-link" href="https://www.ncbi.nlm.nih.gov/">NCBI</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="https://www.abhinavnepal.com/">Abhinav Nepal</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="https://www.ku.edu.np/">KU</a>
+          </li>
         </ul>
         <form class="form-inline my-2 my-lg-0"method = "POST">
           {% csrf_token %}
@@ -52,31 +57,201 @@
         
       </div>
     </nav>
-    <div class="container width='100%'">
-      <div flex-wrap="nowrap" flex-direction="row" class="row mt-4 " >
-        <div class="col-md-10 offset-md-1">
-          {{ m|safe}}
-        </div>
-        <div>
-          <span>'processid' 'sampleid' 'recordID' 'catalognum' 'fieldnum'
-            'institution_storing' 'collection_code' 'bin_uri' 'phylum_taxID'
-            'phylum_name' 'class_taxID' 'class_name' 'order_taxID' 'order_name'
-            'family_taxID' 'family_name' 'subfamily_taxID' 'subfamily_name'
-            'genus_taxID' 'genus_name' 'species_taxID' 'species_name'
-            'subspecies_taxID' 'subspecies_name' 'identification_provided_by'
-            'identification_method' 'identification_reference' 'tax_note'
-            'voucher_status' 'tissue_type' 'collection_event_id' 'collectors'
-            'collectiondate_start' 'collectiondate_end' 'collectiontime'
-            'collection_note' 'site_code' 'sampling_protocol' 'lifestage' 'sex'
-            'reproduction' 'habitat' 'associated_specimens' 'associated_taxa'
-            'extrainfo' 'notes' 'lat' 'lon' 'coord_source' 'coord_accuracy' 'elev'
-            'depth' 'elev_accuracy' 'depth_accuracy' 'country' 'province_state'
-            'region' 'sector' 'exactsite' 'image_ids' 'image_urls'
-            'media_descriptors' 'captions' 'copyright_holders' 'copyright_years'
-            'copyright_licenses' 'copyright_institutions' 'photographers'</span>
+    
+    <div class="col-md-6 col-md-push-6 col-sm-6 col-sm-push-6 col-xs-12" id="summaryBlock">
+      <div class="container width='100%'">
+        <div flex-wrap="nowrap" flex-direction="row" class="row mt-4 " >
+          <div class="col-md-10 offset-md-1">
+            {{ m|safe}}
+          </div>
+          <div>
+            <span>'processid' 'sampleid' 'recordID' 'catalognum' 'fieldnum'
+              'institution_storing' 'collection_code' 'bin_uri' 'phylum_taxID'
+              'phylum_name' 'class_taxID' 'class_name' 'order_taxID' 'order_name'
+              'family_taxID' 'family_name' 'subfamily_taxID' 'subfamily_name'
+              'genus_taxID' 'genus_name' 'species_taxID' 'species_name'
+              'subspecies_taxID' 'subspecies_name' 'identification_provided_by'
+              'identification_method' 'identification_reference' 'tax_note'
+              'voucher_status' 'tissue_type' 'collection_event_id' 'collectors'
+              'collectiondate_start' 'collectiondate_end' 'collectiontime'
+              'collection_note' 'site_code' 'sampling_protocol' 'lifestage' 'sex'
+              'reproduction' 'habitat' 'associated_specimens' 'associated_taxa'
+              'extrainfo' 'notes' 'lat' 'lon' 'coord_source' 'coord_accuracy' 'elev'
+              'depth' 'elev_accuracy' 'depth_accuracy' 'country' 'province_state'
+              'region' 'sector' 'exactsite' 'image_ids' 'image_urls'
+              'media_descriptors' 'captions' 'copyright_holders' 'copyright_years'
+              'copyright_licenses' 'copyright_institutions' 'photographers'</span>
+          </div>
         </div>
       </div>
-    </div>
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h3>Results Summary</h3>
+				</div>
+				<div class="ibox-content summaryBlock">
+					Found <span class="emphasis">2,565</span> published records,<br>
+					with  <span class="emphasis">2,565</span> records with sequences,<br>
+					forming <span class="emphasis">590</span> BINs (clusters),<br>
+					with specimens from <span class="emphasis">1</span> country,<br>
+					deposited in <span class="emphasis">70</span> institutions.<br><br>
+					Of these records, <span class="emphasis">1,909</span> have species names,
+					and represent <span class="emphasis">799</span> species.
+				</div>
+			</div>
+								<div class="ibox float-e-margins">
+					<div class="ibox-title">
+						<h3>Specimen Distribution</h3>
+					</div>
+					<div class="ibox-content">
+				</div>
+			    					<div class="ibox float-e-margins">
+						<div class="ibox-title">
+					<h3>Data Summary</h3>
+				</div>
+				<div class="ibox-content">
+
+					<div class="ibox float-e-margins">
+						<div class="ibox-title">
+							<h5><strong>Institutions</strong></h5>
+							<div class="ibox-tools">
+								<a class="collapse-link">
+									<i class="fa fa-chevron-up"></i>
+								</a>
+							</div>
+						</div>
+						<div id="summary-inst" class="graph-text ibox-content"><canvas width="375" height="187" style="width: 300px; height: 150px;"></canvas><div><ul class="list-unstyled"><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#a3e1d4"> </span>Mined from GenBank, NCBI: 1255</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#A3A0D4"> </span>University of Hawaii Insect Museum: 289</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#68A0D4"> </span>SNSB, Zoologische Staatssammlung Muenchen: 223</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#E7B98F"> </span>National Herbarium and Plant Laboratories, Nepal: 113</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#F0D85C"> </span>Smithsonian Institution, National Museum of Natural History: 64</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#78DE7D"> </span>Research Collection of Ron Brechlin: 55</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#dedede"> </span>Canadian National Collection of Insects, Arachnids and Nematodes: 51</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#b5b8cf"> </span>Museum Witt Muenchen: 44</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#a3e1d4"> </span>University of Guelph: 43</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#A3A0D4"> </span>McGuire Centre for Lepidoptera and Biodiversity: 39</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#68A0D4"> </span>Others: 389</li></ul></div></div>
+					</div>
+					<div class="ibox float-e-margins">
+						<div class="ibox-title">
+							<h5><strong>Countries</strong></h5>
+							<div class="ibox-tools">
+								<a class="collapse-link">
+									<i class="fa fa-chevron-up"></i>
+								</a>
+							</div>
+						</div>
+						<div id="summary-country" class="graph-text ibox-content"><canvas width="375" height="187" style="width: 300px; height: 150px;"></canvas><div><ul class="list-unstyled"><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#a3e1d4"> </span>Nepal: 2565</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#A3A0D4"> </span>Others: 0</li></ul></div></div>
+					</div>
+					<div class="ibox float-e-margins">
+						<div class="ibox-title">
+							<h5><strong>Species</strong></h5>
+							<div class="ibox-tools">
+								<a class="collapse-link">
+									<i class="fa fa-chevron-up"></i>
+								</a>
+							</div>
+						</div>
+						<div id="summary-species" class="graph-text ibox-content"><canvas width="375" height="187" style="width: 300px; height: 150px;"></canvas><div><ul class="list-unstyled"><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#a3e1d4"> </span>Unspecified*: 656</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#A3A0D4"> </span>Bactrocera dorsalis: 109</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#68A0D4"> </span>Bactrocera zonata: 100</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#E7B98F"> </span>Bemisia tabaci: 76</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#F0D85C"> </span>Pediculus humanus: 54</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#78DE7D"> </span>Bathynomus giganteus: 47</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#dedede"> </span>Bactrocera raiensis: 45</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#b5b8cf"> </span>Homo sapiens: 43</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#a3e1d4"> </span>Indoplanorbis exustus: 31</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#A3A0D4"> </span>Lilioceris egena: 27</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#68A0D4"> </span>Others: 1377</li></ul></div></div>
+					</div>
+					<div class="ibox float-e-margins">
+						<div class="ibox-title">
+							<h5><strong>Genera</strong></h5>
+							<div class="ibox-tools">
+								<a class="collapse-link">
+									<i class="fa fa-chevron-up"></i>
+								</a>
+							</div>
+						</div>
+						<div id="summary-genus" class="graph-text ibox-content"><canvas width="375" height="187" style="width: 300px; height: 150px;"></canvas><div><ul class="list-unstyled"><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#a3e1d4"> </span>Unspecified*: 580</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#A3A0D4"> </span>Bactrocera: 268</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#68A0D4"> </span>Bemisia: 76</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#E7B98F"> </span>Pediculus: 54</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#F0D85C"> </span>Bathynomus: 47</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#78DE7D"> </span>Lilioceris: 45</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#dedede"> </span>Aedes: 45</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#b5b8cf"> </span>Homo: 43</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#a3e1d4"> </span>Meconopsis: 41</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#A3A0D4"> </span>Schistosoma: 35</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#68A0D4"> </span>Others: 1331</li></ul></div></div>
+					</div>
+					<div class="ibox float-e-margins">
+						<div class="ibox-title">
+							<h5><strong>Families</strong></h5>
+							<div class="ibox-tools">
+								<a class="collapse-link">
+									<i class="fa fa-chevron-up"></i>
+								</a>
+							</div>
+						</div>
+						<div id="summary-family" class="graph-text ibox-content"><canvas width="375" height="187" style="width: 300px; height: 150px;"></canvas><div><ul class="list-unstyled"><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#a3e1d4"> </span>Unspecified*: 570</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#A3A0D4"> </span>Tephritidae: 290</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#68A0D4"> </span>Cyprinidae: 89</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#E7B98F"> </span>Aleyrodidae: 76</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#F0D85C"> </span>Chrysomelidae: 70</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#78DE7D"> </span>Pediculidae: 54</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#dedede"> </span>Asteraceae: 54</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#b5b8cf"> </span>Carabidae: 54</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#a3e1d4"> </span>Culicidae: 52</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#A3A0D4"> </span>Planorbidae: 52</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#68A0D4"> </span>Others: 1204</li></ul></div></div>
+					</div>
+					<div class="ibox float-e-margins">
+						<div class="ibox-title">
+							<h5><strong>Orders</strong></h5>
+							<div class="ibox-tools">
+								<a class="collapse-link">
+									<i class="fa fa-chevron-up"></i>
+								</a>
+							</div>
+						</div>
+						<div id="summary-order" class="graph-text ibox-content"><canvas width="375" height="187" style="width: 300px; height: 150px;"></canvas><div><ul class="list-unstyled"><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#a3e1d4"> </span>Lepidoptera: 650</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#A3A0D4"> </span>Diptera: 366</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#68A0D4"> </span>Coleoptera: 167</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#E7B98F"> </span>Hemiptera: 107</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#F0D85C"> </span>Cypriniformes: 106</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#78DE7D"> </span>Hymenoptera: 89</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#dedede"> </span>Ranunculales: 71</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#b5b8cf"> </span>Asterales: 56</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#a3e1d4"> </span>Psocodea: 55</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#A3A0D4"> </span>Unspecified*: 52</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#68A0D4"> </span>Others: 846</li></ul></div></div>
+					</div>
+					<div class="ibox float-e-margins">
+						<div class="ibox-title">
+							<h5><strong>BIN Clusters</strong></h5>
+							<div class="ibox-tools">
+								<a class="collapse-link">
+									<i class="fa fa-chevron-up"></i>
+								</a>
+							</div>
+						</div>
+						<div id="summary-bins" class="graph-text ibox-content"><canvas width="375" height="187" style="width: 300px; height: 150px;"></canvas><div><ul class="list-unstyled"><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#a3e1d4"> </span>BOLD:ACG7869: 47</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#A3A0D4"> </span>BOLD:AAA0001: 42</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#68A0D4"> </span>BOLD:AEG0409: 27</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#E7B98F"> </span>BOLD:AAH6725: 18</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#F0D85C"> </span>BOLD:AEG8718: 18</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#78DE7D"> </span>BOLD:ADJ8445: 15</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#dedede"> </span>BOLD:AAB1288: 13</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#b5b8cf"> </span>BOLD:AAB5811: 12</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#a3e1d4"> </span>BOLD:ACG4809: 11</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#A3A0D4"> </span>BOLD:AEI9358: 11</li><li><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:10px;width:15px;height:15px;display:inline-block;background-color:#68A0D4"> </span>Others: 1007</li></ul></div></div>
+					</div>
+
+				</div>
+			</div>
+
+			<!-- START Computer Readable Format //-->
+			<script type="text/javascript" src="/libhtml_v3/syntaxHighlighter/js/XRegExp.js"></script>
+			<script type="text/javascript" src="/libhtml_v3/syntaxHighlighter/js/shCore.js"></script>
+			<script type="text/javascript" src="/libhtml_v3/syntaxHighlighter/js/shBrushXml.js"></script>
+			<script type="text/javascript" src="/libhtml_v3/syntaxHighlighter/js/shBrushPlain.js"></script>
+			<link type="text/css" rel="stylesheet" href="/libhtml_v3/syntaxHighlighter/css/shCore.css">
+			<link type="text/css" rel="Stylesheet" href="/libhtml_v3/syntaxHighlighter/css/shThemeDefault.css">
+			<script type="text/javascript">
+				SyntaxHighlighter.defaults.toolbar = false;
+				function make_crf_popup() {
+					if($("#crf-xml").text() == "") {
+						showModalDialog("Loading","Loading Computer Readable Data");
+						xhttp=new XMLHttpRequest();
+						xhttp.overrideMimeType('text/xml');
+						xhttp.open("GET",'API_Public/stats?format=xml&dataType=overview&geo=+Nepal',false);
+						xhttp.onreadystatechange = function() {
+							if (window.ActiveXObject) {
+								$("#crf-xml").text(xhttp.responseXML.xml);
+							} else {
+								$("#crf-xml").text((new XMLSerializer()).serializeToString(xhttp.responseXML));
+							}
+							SyntaxHighlighter.all();
+							closeModalWaiting();
+
+							$('#crf-cont').modal('show');
+						};
+						xhttp.send();
+					} else {
+						$('#crf-cont').modal('show');
+					}
+				}
+
+			</script>
+			
+			<!-- MODAL DIALOG FOR MAPs -->
+			<div id="crf-cont" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">×</button>
+							<h4 class="modal-title " id="dialogTitle">Maps</h4>
+						</div>
+						<div class="modal-body">
+
+							<div>
+								<div id="crf-link" style="text-align:center;font-family:sans-serif;font-size:small;float:left;"><a href="/index.php/API_Public/stats?format=xml&amp;dataType=overview&amp;geo=+Nepal">Download As File</a></div>
+								<div id="crf-api" style="text-align:center;font-family:sans-serif;font-size:small;float:right;">Generated using the <a href="/index.php/resources/api?type=webservices">BOLD API</a></div>
+							</div>
+							<div id="crf-xml-div" style="font-family:monospace;background-color:white;width:100%;height:100%;margin-top:5px;margin-bottom:5px;clear:both;">
+								<pre id="crf-xml" class="brush: xml; ruler: true;"></pre>
+							</div>
+						</div>
+					<div class="modal-footer">
+						<button id="closeDialog" name="closeDialog" data-dismiss="modal" class="btn btn-primary btn-sm">Close</button>
+					</div>
+				</div>
+				</div>
+			</div>
+		<!-- END Computer Readable Format //-->
+
+	    </div>
     <!-- Optional JavaScript; choose one of the two! -->
 
     <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
@@ -89,5 +264,9 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
     -->
+    <span>
+      All the data above has been scraped from BOLDsystems.org We are very thankful to them for providing such an influential data for free.
+    </span>
+    
   </body>
 </html>

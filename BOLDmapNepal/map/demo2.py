@@ -79,22 +79,22 @@ def getlocs(filename):
 # popups=list(popups)
 # for a in popups:
 #     print(a,type(a))
-df = pd.read_csv(filepath)
-print(df.columns.values)
-address= 'region=bagmati,'
-address = address.split(",")
-crit=[]
-value=[]
-print("split ,",address)
-for a in address[:-1]:
-    b,c = a.split('=')
-    print("split =",b.strip(),c.strip())
-    crit.append(b.strip())
-    value.append(c.strip())
-print(crit,value)
-#print(pd.unique( df['region'].str.contains('bagmati', flags=re.I, regex=True)  ))
-conditions = [ ]
-for i,j in zip(crit,value):
-    tmp = (df[i].str.contains(j, flags=re.I, regex=True)) 
-    tmp[tmp!=True] = False
-    print(tmp)
+# df = pd.read_csv(filepath)
+# print(df.columns.values)
+# address= 'region=bagmati,'
+# address = address.split(",")
+# crit=[]
+# value=[]
+# print("split ,",address)
+# for a in address[:-1]:
+#     b,c = a.split('=')
+#     print("split =",b.strip(),c.strip())
+#     crit.append(b.strip())
+#     value.append(c.strip())
+# print(crit,value)
+# #print(pd.unique( df['region'].str.contains('bagmati', flags=re.I, regex=True)  ))
+# conditions = [ ]
+# for i,j in zip(crit,value):
+#     tmp = (df[i].str.contains(j, flags=re.I, regex=True)) 
+#     tmp[tmp!=True] = False
+#     print(tmp)
