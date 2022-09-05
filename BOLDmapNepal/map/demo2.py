@@ -17,7 +17,7 @@ def popup_html(row,dft=pd.DataFrame()):
     else:
         df = pd.read_csv(filepath)
     #print("inside dft2",row,df)
-    queries = ['processid','sampleid','phylum_name','class_name','order_name','family_name','genus_name','species_name','subspecies_name']
+    queries = ("""'processid' 'sampleid' 'recordID' 'catalognum' 'fieldnum' 'institution_storing' 'collection_code' 'bin_uri' 'phylum_name' 'class_name' 'order_name' 'family_name'  'subfamily_name' 'genus_name' 'species_name' 'subspecies_name' 'identification_provided_by' 'identification_method' 'identification_reference' 'collectors' 'collectiondate_start' 'collectiondate_end' 'collectiontime' 'collection_note' 'sampling_protocol' 'lifestage' 'sex' 'reproduction' 'habitat' 'associated_specimens' 'associated_taxa' 'extrainfo' 'notes' 'lat' 'lon' 'elev' 'depth' 'country' 'province_state' 'region' 'sector' 'exactsite' 'image_urls' 'captions' 'copyright_holders' 'photographers'""").split(' ')
     genus_name = df['genus_name'].iloc[i]
     species_name = df['species_name'].iloc[i]
     imgurl = df['image_urls'].iloc[i]
@@ -33,7 +33,8 @@ def popup_html(row,dft=pd.DataFrame()):
     
     html2 = html2+ """</tr>"""
     for that in queries:
-        html2 = html2+"""<tr><td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">{}</span>""".format(that)+"""</td><td style="width: 150px;background-color: """+ right_col_color +""";">{}</td>""".format(df[that].iloc[i]) + """</tr>"""
+        if that[1:-1]=='':continue
+        html2 = html2+"""<tr><td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">{}</span>""".format(that[1:-1])+"""</td><td style="width: 150px;background-color: """+ right_col_color +""";">{}</td>""".format(df[that[1:-1]].iloc[i]) + """</tr>"""
     hyperlink = "https://www.boldsystems.org/index.php/Public_RecordView?processid={}".format(df['processid'].iloc[i])
     html2= html2+ """<tr><td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">{}</span>""".format("More Info")+"""</td><td style="width: 150px;background-color: """+ right_col_color +""";"><a href={}>here</a></td>""".format(hyperlink) + """</tr>"""
     html3 = """</tbody></table></html>"""
@@ -58,18 +59,18 @@ def getlocs(filename):
         if d != []: locs.append(d)
     return locs
 
-# locs = getlocs(filepath) 
-# popupslis=[]
-# for i in range(0,len(df)):
-#     html = popup_html(i)
-#     popupslis.append(html)
-#     popup = folium.Popup(folium.Html(html, script=True), max_width=500)
+locs = getlocs(filepath) 
+popupslis=[]
+for i in range(0,len(df)):
+    html = popup_html(i)
+    popupslis.append(html)
+    popup = folium.Popup(folium.Html(html, script=True), max_width=500)
     
-# df2 = pd.DataFrame(columns=['locs','popups'])
-# print(len(locs),len(popupslis))
-# df2['locs'] = locs
-# df2['popups'] = popupslis
-# df2.to_csv("populus.csv",)
+df2 = pd.DataFrame(columns=['locs','popups'])
+print(len(locs),len(popupslis))
+df2['locs'] = locs
+df2['popups'] = popupslis
+df2.to_csv("populus.csv",)
 # df2 = pd.read_csv("populus.csv")
 # flocs = df2.loc[:,'locs']
 # popups = df2.loc[:,'popups']
@@ -78,7 +79,7 @@ def getlocs(filename):
 # #     print(a)
 # popups=list(popups)
 # for a in popups:
-#     print(a,type(a))
+# #     print(a,type(a))
 # df = pd.read_csv(filepath)
 # print(df.columns.values)
 # address= 'region=bagmati,'

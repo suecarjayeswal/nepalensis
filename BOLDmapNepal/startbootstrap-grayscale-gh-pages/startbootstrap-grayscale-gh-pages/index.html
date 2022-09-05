@@ -1,29 +1,25 @@
 <!DOCTYPE html>
-{% load crispy_forms_tags %}
 <html lang="en">
     <head>
-		{% load static %}
-		<meta charset="utf-8" />
+        <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>The BOLD nepalensis</title>
+        <title>Grayscale - Start Bootstrap Theme</title>
         <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
         <!-- Font Awesome icons (free version)-->
-		<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
         <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
         <!-- Google fonts-->
         <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
         <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
-		<link href="{% static 'css/styleMine.css' %}" rel="stylesheet" />
+        <link href="css/styles.css" rel="stylesheet" />
     </head>
     <body id="page-top">
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
             <div class="container px-4 px-lg-5">
-                <a class="navbar-brand" href="#page-top"><u>nepalensis</u> </a>
+                <a class="navbar-brand" href="#page-top">Start Bootstrap</a>
                 <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                     Menu
                     <i class="fas fa-bars"></i>
@@ -31,15 +27,9 @@
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
-                        <li class="nav-item"><a class="nav-link" href="https://ku.edu.np/">KU</a></li>
-                        <li class="nav-item"><a class="nav-link" href="https://www.boldsystems.org/index.php/">BOLD</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#projects">Projects</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#signup">Contact</a></li>
                     </ul>
-					<form class="form-inline my-2 my-lg-0"method = "POST" >
-						{% csrf_token %}
-						{{form|crispy}}
-						<!-- <input class="form-control mr-sm-2" type="search" placeholder="Search" name = "address" aria-label="Search"> -->
-						<button class="btn btn-outline-success my-2 my-sm-0 mx-3" type="submit">Search</button>
-					  </form>
                 </div>
             </div>
         </nav>
@@ -48,8 +38,8 @@
             <div class="container px-4 px-lg-5 d-flex h-100 align-items-center justify-content-center">
                 <div class="d-flex justify-content-center">
                     <div class="text-center">
-                        <h1 class="mx-auto my-0 text-uppercase">The BOLD Nepal</h1>
-                        <h2 class="text-white-50 mx-auto mt-2 mb-5">A possibly interactive map of Nepal presenting different Specimens published to BOLDsystems</h2>
+                        <h1 class="mx-auto my-0 text-uppercase">Grayscale</h1>
+                        <h2 class="text-white-50 mx-auto mt-2 mb-5">A free, responsive, one page Bootstrap theme created by Start Bootstrap.</h2>
                         <a class="btn btn-primary" href="#about">Get Started</a>
                     </div>
                 </div>
@@ -60,37 +50,60 @@
             <div class="container px-4 px-lg-5">
                 <div class="row gx-4 gx-lg-5 justify-content-center">
                     <div class="col-lg-8">
-                        <h2 class="text-white mb-4">Created By Team <u>nepalensis</u></h2>
+                        <h2 class="text-white mb-4">Built with Bootstrap 5</h2>
                         <p class="text-white-50">
-                            Team <u>nepalensis</u> Team nepalensis is a team of two delegates Swikar Jaiswal and Aahana Bhandari. The team had been formed to participate in
-							Watson Crack The Code-Fest, organized by <a href="https://kubicclub.ku.edu.np/">KUBiC</a>(Kathmandu University Biotechnology Creatives).
+                            Grayscale is a free Bootstrap theme created by Start Bootstrap. It can be yours right now, simply download the template on
+                            <a href="https://startbootstrap.com/theme/grayscale/">the preview page.</a>
+                            The theme is open source, and you can use it for any purpose, personal or commercial.
                         </p>
                     </div>
                 </div>
-                
+                <img class="img-fluid" src="assets/img/ipad.png" alt="..." />
             </div>
         </section>
         <!-- Projects-->
         <section class="projects-section bg-light" id="projects">
-			<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-            <div class="container px-4 px-lg-5" >
+            <div class="container px-4 px-lg-5">
                 <!-- Featured Project Row-->
-                <div id = "containerMap" class="row gx-0 mb-4 mb-lg-5 align-items-center">
-					<h3> The BOLD Nepal Map</h3>
-					<!-- <a href="#" id="toggle_fullscreen">Toggle Fullscreen</a> -->
-                    <div class="col-xl-8 col-lg-7">
-						{{ m|safe}}
-						<!-- <img class="img-fluid mb-3 mb-lg-0" src="{%static 'assets/img/bg-masthead.jpg'%}" alt="..." /> -->
-					</div>
+                <div class="row gx-0 mb-4 mb-lg-5 align-items-center">
+                    <div class="col-xl-8 col-lg-7"><img class="img-fluid mb-3 mb-lg-0" src="assets/img/bg-masthead.jpg" alt="..." /></div>
                     <div class="col-xl-4 col-lg-5">
                         <div class="featured-text text-center text-lg-left">
-                            <h4>Specimens Count</h4>
-                            <p class="text-black-50 mb-0">Click on any Marker to expand and click any pointer to sheet the information chart.</p>
+                            <h4>Shoreline</h4>
+                            <p class="text-black-50 mb-0">Grayscale is open source and MIT licensed. This means you can use it for any project - even commercial projects! Download it, customize it, and publish your website!</p>
                         </div>
                     </div>
                 </div>
                 <!-- Project One Row-->
-                
+                <div class="row gx-0 mb-5 mb-lg-0 justify-content-center">
+                    <div class="col-lg-6"><img class="img-fluid" src="assets/img/demo-image-01.jpg" alt="..." /></div>
+                    <div class="col-lg-6">
+                        <div class="bg-black text-center h-100 project">
+                            <div class="d-flex h-100">
+                                <div class="project-text w-100 my-auto text-center text-lg-left">
+                                    <h4 class="text-white">Misty</h4>
+                                    <p class="mb-0 text-white-50">An example of where you can put an image of a project, or anything else, along with a description.</p>
+                                    <hr class="d-none d-lg-block mb-0 ms-0" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Project Two Row-->
+                <div class="row gx-0 justify-content-center">
+                    <div class="col-lg-6"><img class="img-fluid" src="assets/img/demo-image-02.jpg" alt="..." /></div>
+                    <div class="col-lg-6 order-lg-first">
+                        <div class="bg-black text-center h-100 project">
+                            <div class="d-flex h-100">
+                                <div class="project-text w-100 my-auto text-center text-lg-right">
+                                    <h4 class="text-white">Mountains</h4>
+                                    <p class="mb-0 text-white-50">Another example of a project with its respective description. These sections work well responsively as well, try this theme on a small screen!</p>
+                                    <hr class="d-none d-lg-block mb-0 me-0" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
         <!-- Signup-->
@@ -147,7 +160,7 @@
                                 <i class="fas fa-map-marked-alt text-primary mb-2"></i>
                                 <h4 class="text-uppercase m-0">Address</h4>
                                 <hr class="my-4 mx-auto" />
-                                <div class="small text-black-50">KU Main Campus,28 Kilo, Dhulikhel,Nepal</div>
+                                <div class="small text-black-50">4923 Market Street, Orlando FL</div>
                             </div>
                         </div>
                     </div>
@@ -157,7 +170,7 @@
                                 <i class="fas fa-envelope text-primary mb-2"></i>
                                 <h4 class="text-uppercase m-0">Email</h4>
                                 <hr class="my-4 mx-auto" />
-                                <div class="small text-black-50"><a href="#!">kubicclub@ku.edu.np</a></div>
+                                <div class="small text-black-50"><a href="#!">hello@yourdomain.com</a></div>
                             </div>
                         </div>
                     </div>
@@ -167,17 +180,15 @@
                                 <i class="fas fa-mobile-alt text-primary mb-2"></i>
                                 <h4 class="text-uppercase m-0">Phone</h4>
                                 <hr class="my-4 mx-auto" />
-                                <div class="small text-black-50"><p>9862327065
-									Priyanka Thapa Magar
-									(President KUBiC)</p></div>
+                                <div class="small text-black-50">+1 (555) 902-8832</div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="social d-flex justify-content-center">
-                    <a class="mx-2" href="https://www.linkedin.com/school/kubicclub"><i class="fab fa-twitter"></i></a>
-                    <a class="mx-2" href="https://www.facebook.com/kubicclub"><i class="fab fa-facebook-f"></i></a>
-                    <a class="mx-2" href="https://linktr.ee/kubicclub?fbclid=IwAR1_CE6yfkTCyqp4HijG0G6JLSyyPx55BNE9jaZBMh3t_B08sR8mC8RbroU"><i class="fas fa-clipboard-list"></i></a>
+                    <a class="mx-2" href="#!"><i class="fab fa-twitter"></i></a>
+                    <a class="mx-2" href="#!"><i class="fab fa-facebook-f"></i></a>
+                    <a class="mx-2" href="#!"><i class="fab fa-github"></i></a>
                 </div>
             </div>
         </section>
@@ -186,45 +197,11 @@
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
-        <script src="{%static 'js/scripts.js' %}"></script>
-		<script>
-			$('#toggle_fullscreen').on('click', function(){
-				// if already full screen; exit
-				// else go fullscreen
-				if (
-					document.fullscreenElement ||
-					document.webkitFullscreenElement ||
-					document.mozFullScreenElement ||
-					document.msFullscreenElement
-				) {
-					if (document.exitFullscreen) {
-					document.exitFullscreen();
-					} else if (document.mozCancelFullScreen) {
-					document.mozCancelFullScreen();
-					} else if (document.webkitExitFullscreen) {
-					document.webkitExitFullscreen();
-					} else if (document.msExitFullscreen) {
-					document.msExitFullscreen();
-					}
-				} else {
-					element = $('#containerMap').get(0);
-					if (element.requestFullscreen) {
-					element.requestFullscreen();
-					} else if (element.mozRequestFullScreen) {
-					element.mozRequestFullScreen();
-					} else if (element.webkitRequestFullscreen) {
-					element.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
-					} else if (element.msRequestFullscreen) {
-					element.msRequestFullscreen();
-					}
-				}
-				});
-		</script>
+        <script src="js/scripts.js"></script>
         <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
         <!-- * *                               SB Forms JS                               * *-->
         <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
         <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
-        
-		<script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+        <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
     </body>
 </html>

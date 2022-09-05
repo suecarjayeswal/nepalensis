@@ -12,6 +12,7 @@ import numpy as np
 import branca
 from pathlib import Path
 from folium.plugins import MarkerCluster,HeatMap
+import folium.plugins
 from pathlib import Path
 from .filters import ListingFilter
 import re
@@ -91,7 +92,7 @@ def finder(crit,value):
     tempdf = ldf.loc[np.bitwise_and.reduce(conditions)]
     conditions = [tempdf['lat'].isnull(),tempdf['lon'].isnull()]
     tempdf.loc[np.bitwise_and.reduce(conditions),['lat','lon']]=[27.7172,85.3240]
-    print(tempdf.reset_index())
+    #print(tempdf.reset_index())
     return tempdf.reset_index()
 
 
@@ -102,7 +103,7 @@ def index(request):
         form = SearchForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('/')
+            return redirect('/#containerMap')
     else:
         form = SearchForm()
 
@@ -178,6 +179,7 @@ def index(request):
     #     popupslis.append(popup)
     HeatMap(locs,min_opacity=0.1,control=True, blur = 35).add_to(m)
     MarkerCluster(locs,popups=list(popupslis)).add_to(m)
+    folium.plugins.Fullscreen().add_to(m)
     m = m._repr_html_()
     context = {
         'm':m,
