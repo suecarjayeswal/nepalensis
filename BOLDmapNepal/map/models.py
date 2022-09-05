@@ -8,3 +8,6 @@ class Search(models.Model):
 
      def __str__(self):
         return self.address
+
+class Listing(models.Model):
+   processid = models.CharField(max_length = 60)

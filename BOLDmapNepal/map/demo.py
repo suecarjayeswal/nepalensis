@@ -36,9 +36,33 @@ print(df2.loc[:,['processid','lat','lon']])
 latlonlis = []
 for i,row in df2.iterrows():
     latlonlis.append([row['lat'],row['lon']])
-lat = 30.1200
-lon = 81.4000
-print(df2.loc[df2['lat']==lat ,['processid','lat','lon']])
-filepath = os.path.join(os.getcwd(),"BOLDmapNepal","data files","bold_data2.csv")
-df2.to_csv(filepath)
+
+def finder(crit,value):
+    conditions = [ ldf[i]==j for i,j in zip(crit,value)]
+    print("test")
+    tempdf = ldf.loc[np.bitwise_and.reduce(conditions)]
+    conditions = [tempdf['lat'].isnull(),tempdf['lon'].isnull()]
+    tempdf.loc[np.bitwise_and.reduce(conditions),['lat','lon']]=[27.7172,85.3240]
+    return tempdf
+address= 'species_name=Rungia pectinata,identification_reference=(L.) Nees,'
+address = address.split(",")
+crit=[]
+value=[]
+print("split ,",address)
+for a in address[:-1]:
+    b,c = a.split('=')
+    print("split =",b.strip(),c.strip())
+    crit.append(b.strip())
+    value.append(c.strip())
+print(crit,value)
+temdf = finder(crit,value)
+print(temdf)
+locs = []
+for i,row in temdf.iterrows():
+    locs.append([row['processid'],row['lat'],row['lon']])
+print(len(locs))
+for a in locs:
+    print(a)
+#filepath = os.path.join(os.getcwd(),"BOLDmapNepal","data files","bold_data2.csv")
+#df2.to_csv(filepath)
 #print(headers)
