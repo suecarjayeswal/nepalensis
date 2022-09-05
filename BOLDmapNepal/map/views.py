@@ -14,8 +14,8 @@ from pathlib import Path
 from folium.plugins import MarkerCluster,HeatMap
 from pathlib import Path
 from .filters import ListingFilter
-
-
+import re
+from fuzzywuzzy import fuzz
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -80,7 +80,14 @@ def getlocs(filename):
         if d != []: locs.append(d)
     return locs
 def finder(crit,value):
-    conditions = [ ldf[i]==j for i,j in zip(crit,value)]
+    #(ldf[i].str.contains(j, flags=re.I, regex=True))   for i,j in zip(crit,value)
+    #conditions = [ ldf[i]==j for i,j in zip(crit,value)]
+    #fuzz.ratio(Str1.lower(),Str2.lower())
+    conditions = [ ]
+    for i,j in zip(crit,value):
+        tmp = (ldf[i].str.contains(j, flags=re.I, regex=True)) 
+        tmp[tmp!=True] = False
+        conditions.append(tmp)
     tempdf = ldf.loc[np.bitwise_and.reduce(conditions)]
     conditions = [tempdf['lat'].isnull(),tempdf['lon'].isnull()]
     tempdf.loc[np.bitwise_and.reduce(conditions),['lat','lon']]=[27.7172,85.3240]
@@ -126,19 +133,19 @@ def index(request):
                 locs.append([row['lat'],row['lon']])
                 popup = folium.Popup(folium.Html(html, script=True), max_width=500)
                 popupslis.append(popup)
-       
-            m = folium.Map(location=[27.79,85.2714],zoom_start=6,)
-            folium.TileLayer(tiles = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',attr = 'Esri',name = 'Esri Satellite',overlay = True,opacity=0.6,control = True).add_to(m)
-            HeatMap(locs,min_opacity=0.1,control=True, blur = 35).add_to(m)
-            MarkerCluster(locs,popups=popupslis).add_to(m)
-            m = m._repr_html_()
-            context = {
-                'm':m,
-                'form':form,
-                # 'listing_filter':listing_filter,
-            }
-            return render(request,'index.html',context)
-        
+            if not tempdf.empty: 
+                m = folium.Map(location=[27.79,85.2714],zoom_start=6,)
+                folium.TileLayer(tiles = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',attr = 'Esri',name = 'Esri Satellite',overlay = True,opacity=0.6,control = True).add_to(m)
+                HeatMap(locs,min_opacity=0.1,control=True, blur = 35).add_to(m)
+                MarkerCluster(locs,popups=popupslis).add_to(m)
+                m = m._repr_html_()
+                context = {
+                    'm':m,
+                    'form':form,
+                    # 'listing_filter':listing_filter,
+                }
+                return render(request,'index.html',context)
+    
     print("not run",address)
     address = Search.objects.all().last()
     location =  geocoder.osm(address)

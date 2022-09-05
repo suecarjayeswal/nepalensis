@@ -4,6 +4,7 @@ import folium
 import branca
 import numpy as np
 import os
+import re
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -26,8 +27,8 @@ def popup_html(row,dft=pd.DataFrame()):
     html1 = """ <html><head><h4 style="margin-bottom:10"; width="200px"display: 'flex';align-items: 'center';justify-content: 'space-between';>{}""".format("Info")
     html2=""
     # #print(imgurl)
-    # if str(imgurl) != 'nan':
-    #     html2 = html2+ """<img src={} height = '100' width='100'>""".format(imgurl)
+    if str(imgurl) != 'nan':
+        html2 = html2+ """<img src={} height = '100' width='100'>""".format(imgurl)
     html2= """</h4></head><table style="height: 126px; width: 350px;"><tbody><tr><td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">{}</span>""".format("name")+"""</td><td style="width: 150px;background-color: """+ right_col_color +""";">{}</td>""".format(name) 
     
     html2 = html2+ """</tr>"""
@@ -62,7 +63,7 @@ def getlocs(filename):
 # for i in range(0,len(df)):
 #     html = popup_html(i)
 #     popupslis.append(html)
-    #popup = folium.Popup(folium.Html(html, script=True), max_width=500)
+#     popup = folium.Popup(folium.Html(html, script=True), max_width=500)
     
 # df2 = pd.DataFrame(columns=['locs','popups'])
 # print(len(locs),len(popupslis))
@@ -80,3 +81,20 @@ def getlocs(filename):
 #     print(a,type(a))
 df = pd.read_csv(filepath)
 print(df.columns.values)
+address= 'region=bagmati,'
+address = address.split(",")
+crit=[]
+value=[]
+print("split ,",address)
+for a in address[:-1]:
+    b,c = a.split('=')
+    print("split =",b.strip(),c.strip())
+    crit.append(b.strip())
+    value.append(c.strip())
+print(crit,value)
+#print(pd.unique( df['region'].str.contains('bagmati', flags=re.I, regex=True)  ))
+conditions = [ ]
+for i,j in zip(crit,value):
+    tmp = (df[i].str.contains(j, flags=re.I, regex=True)) 
+    tmp[tmp!=True] = False
+    print(tmp)
