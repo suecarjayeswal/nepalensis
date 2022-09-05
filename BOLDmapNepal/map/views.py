@@ -152,15 +152,25 @@ def index(request):
     m = folium.Map(location=[27.79,85.2714],zoom_start=6,)
     folium.TileLayer(tiles = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',attr = 'Esri',name = 'Esri Satellite',overlay = True,opacity=0.6,control = True).add_to(m)
     folium.Marker([lat,lng],tooltip='Click for More',popup=country, icon=folium.Icon(color="red")).add_to(m)
-    locs = getlocs(filepath)
+    
+    
+    df3 = pd.read_csv(os.path.join(BASE_DIR,"data files","populus.csv"))
+    flocs = df3.loc[:,'locs']
+    popups = df3.loc[:,'popups']
+    locs = []
+    for a in flocs:
+        b,c = ((a)[1:-1].split(','))
+        locs.append([float(b),float(c)])
+    popupslis=popups
+       
+    # locs = getlocs(filepath)
+    # for i in range(0,len(df)):
+    #     html = popup_html(i)
+    #     iframe = branca.element.IFrame(html=html,width=510,height=280)
+    #     popup = folium.Popup(folium.Html(html, script=True), max_width=500)
+    #     popupslis.append(popup)
     HeatMap(locs,min_opacity=0.1,control=True, blur = 35).add_to(m)
-    popupslis=[]
-    for i in range(0,len(df)):
-        html = popup_html(i)
-        iframe = branca.element.IFrame(html=html,width=510,height=280)
-        popup = folium.Popup(folium.Html(html, script=True), max_width=500)
-        popupslis.append(popup)
-    MarkerCluster(locs,popups=popupslis).add_to(m)
+    MarkerCluster(locs,popups=list(popupslis)).add_to(m)
     m = m._repr_html_()
     context = {
         'm':m,
