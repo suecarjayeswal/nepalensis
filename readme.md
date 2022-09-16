@@ -28,7 +28,4 @@ To run the website, please go through following steps:
 
 
 
-//unnecessary part
-source:  "C:\Users\jasw.LAPTOP-SR8QA6EL\anaconda3\envs\nepalensisEnv"
-activateEnv : C:/Users/jasw.LAPTOP-SR8QA6EL/anaconda3/Scripts/activate
 
